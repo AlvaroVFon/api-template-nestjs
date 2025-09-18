@@ -5,12 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { EnvConfig } from './common/config/env.config';
 import { UserModule } from './user/user.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
     CommonModule,
     ConfigModule.forRoot({
       load: [EnvConfig],
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -27,6 +29,7 @@ import { UserModule } from './user/user.module';
       }),
     }),
     UserModule,
+    RoleModule,
   ],
 })
 export class AppModule {}
