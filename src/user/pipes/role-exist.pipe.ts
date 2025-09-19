@@ -7,9 +7,9 @@ export class RoleExistsPipe implements PipeTransform {
   constructor(private readonly roleService: RoleService) {}
 
   async transform(value: CreateUserDto) {
-    const role = value.role;
+    const role = value.roleId;
 
-    const exists = await this.roleService.findOneByName(role);
+    const exists = await this.roleService.findOne(role);
 
     if (!exists) {
       throw new BadRequestException(`El role "${role}" no existe`);

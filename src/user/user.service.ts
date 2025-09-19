@@ -5,16 +5,27 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { hashPassword } from 'src/common/helpers/crypto.helper';
 import { User } from './entities/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { RoleService } from 'src/role/role.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private roleService: RoleService,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User | null> {
+    const role = await this.roleService.findOne(+createUserDto.roleId);
+    if (!role) return null;
+
     createUserDto.password = await hashPassword(createUserDto.password);
-    const newUser = this.userRepository.create(createUserDto);
+
+    const newUser = this.userRepository.create({
+      email: createUserDto.email,
+      password: createUserDto.password,
+      role,
+    });
+
     return this.userRepository.save(newUser);
   }
 

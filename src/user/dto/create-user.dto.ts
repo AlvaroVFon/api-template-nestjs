@@ -1,4 +1,4 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsPositive, IsString, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -8,6 +8,6 @@ export class CreateUserDto {
   @MinLength(6)
   password: string;
 
-  @IsString()
-  role: string;
+  @IsPositive()
+  roleId: number;
 }

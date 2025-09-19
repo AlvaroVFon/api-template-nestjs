@@ -8,12 +8,12 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
       - REDIS_URL=redis://cache:6379
     depends_on:
-      - db
+      - postgres
       - cache
     volumes:
       - .:/app
       - /app/node_modules
-  db:
+  postgres:
     image: postgres:15
     container_name: postgres-db
     environment:

@@ -19,12 +19,14 @@ export class RoleService {
     return this.roleRespository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Role | null> {
     const role = await this.roleRespository.findOne({
       where: { id },
     });
 
-    if (!role) throw new NotFoundException();
+    if (!role) return null;
+
+    return role;
   }
 
   async findOneByName(name: string): Promise<Role | null> {

@@ -8,6 +8,7 @@ import {
   Delete,
   NotFoundException,
   UsePipes,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -21,8 +22,9 @@ export class UserController {
 
   @Post()
   @UsePipes(RoleExistsPipe, UserExistPipe)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.userService.create(createUserDto);
+    if (!user) throw new BadRequestException('Role does not exist');
   }
 
   @Get()
