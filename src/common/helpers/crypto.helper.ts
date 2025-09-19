@@ -5,5 +5,12 @@ export async function hashPassword(
   saltRounds?: number,
 ): Promise<string> {
   const salt = await bcrypt.genSalt(saltRounds);
-  return await bcrypt.hash(password, salt);
+  return bcrypt.hash(password, salt);
+}
+
+export async function validatePassword(
+  hashedPassword: string,
+  password: string,
+) {
+  return bcrypt.compare(password, hashedPassword);
 }
