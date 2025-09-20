@@ -8,4 +8,8 @@ export const EnvConfig = () => ({
   dbPassword: process.env.DB_PASSWORD || 'postgres',
   redisHost: process.env.REDIS_HOST || 'localhost',
   redisPort: process.env.REDIS_PORT || '6379',
+  jwtSecret: process.env.JWT_SECRET || 'your_secret',
+  jwtExp: process.env.JWT_TTL || '90000',
+  jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || 'your_refresh_secret',
+  jwtRefreshExp: process.env.JWT_REFRESH_TTL || '125000',
 });

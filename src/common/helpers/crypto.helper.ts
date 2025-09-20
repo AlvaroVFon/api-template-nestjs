@@ -9,8 +9,8 @@ export async function hashPassword(
 }
 
 export async function validatePassword(
-  hashedPassword: string,
   password: string,
+  hashedPassword: string,
 ) {
   return bcrypt.compare(password, hashedPassword);
 }
