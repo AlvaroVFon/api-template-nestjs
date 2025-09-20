@@ -12,4 +12,7 @@ export const EnvConfig = () => ({
   jwtExp: process.env.JWT_TTL || '90000',
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET || 'your_refresh_secret',
   jwtRefreshExp: process.env.JWT_REFRESH_TTL || '125000',
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  googleCallbackURL: process.env.GOOGLE_CALLBACK_URL || '',
 });
