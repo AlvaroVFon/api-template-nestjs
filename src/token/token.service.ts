@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { AuthenticatedUser } from 'src/auth/dto/authenticated.dto';
-import jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
+import jwt from 'jsonwebtoken';
+import { AuthenticatedUser } from 'src/auth/dto/authenticated.dto';
+import { TokenType } from 'src/common/enums/token-type.enum';
 
 @Injectable()
 export class TokenService {
@@ -20,20 +21,35 @@ export class TokenService {
 
   generateTokens(user: AuthenticatedUser) {
     return {
-      token: this.generateToken('access', user),
+      token: this.generateAccessToken(user),
       refreshToken: this.generateRefreshToken(user),
     };
   }
 
-  generateToken(type: string, user: AuthenticatedUser) {
-    const payload = { type, user };
-    return jwt.sign(payload, this.jwtSecret, { expiresIn: this.jwtExp });
+  generateToken(
+    type: string,
+    payload: any,
+    exp: number,
+    secret: string,
+  ): string {
+    return jwt.sign({ ...payload, type }, secret, { expiresIn: exp });
+  }
+
+  generateAccessToken(user: AuthenticatedUser): string {
+    return this.generateToken(
+      TokenType.ACCESS,
+      user,
+      this.jwtExp,
+      this.jwtSecret,
+    );
   }
 
   generateRefreshToken(user: AuthenticatedUser) {
-    const payload = { type: 'refresh', user };
-    return jwt.sign(payload, this.jwtRefreshSecret, {
-      expiresIn: this.jwtRefreshExp,
-    });
+    return this.generateToken(
+      TokenType.REFRESH,
+      user,
+      this.jwtRefreshExp,
+      this.jwtRefreshSecret,
+    );
   }
 }
