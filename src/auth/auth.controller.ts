@@ -22,4 +22,14 @@ export class AuthController {
   loginWithGoogle(@Req() req: Express.Request) {
     return this.authService.login(req.user as AuthenticatedUser);
   }
+
+  @Get('/github')
+  @UseGuards(AuthGuard('github'))
+  githubLogin() {}
+
+  @Get('/github/callback')
+  @UseGuards(AuthGuard('github'))
+  loginWithGithub(@Req() req: Express.Request) {
+    return this.authService.login(req.user as AuthenticatedUser);
+  }
 }

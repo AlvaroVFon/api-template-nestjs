@@ -1,4 +1,5 @@
 import { IsOptional, IsPositive, IsString } from 'class-validator';
+import { User } from '../entities/user.entity';
 
 export class OAuthUserDto {
   @IsString()
@@ -12,5 +13,5 @@ export class OAuthUserDto {
 
   @IsOptional()
   @IsPositive()
-  userId?: number;
+  user?: User;
 }

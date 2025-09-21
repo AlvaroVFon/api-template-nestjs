@@ -75,6 +75,8 @@ export class UserService {
     return this.userRepository.update(id, updateUserDto);
   }
 
+  async updateOAuth() {}
+
   async remove(id: number): Promise<DeleteResult> {
     const result = await this.userRepository.delete(id);
     if (!result.affected) throw new NotFoundException();

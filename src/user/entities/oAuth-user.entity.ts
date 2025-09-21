@@ -3,6 +3,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
@@ -13,13 +14,15 @@ export class OAuthUser {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   email: string;
 
   @Column()
+  @PrimaryColumn()
   provider: string;
 
   @Column()
+  @PrimaryColumn()
   providerId: string;
 
   @ManyToOne(() => User, (user) => user.oAuthUsers)

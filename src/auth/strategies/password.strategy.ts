@@ -15,7 +15,7 @@ export class PasswordStrategy extends PassportStrategy(Strategy, 'password') {
 
   async validate(email: string, password: string): Promise<AuthenticatedUser> {
     const user = await this.userService.findOneByEmail(email);
-    if (!user) throw new UnauthorizedException();
+    if (!user || !user.password) throw new UnauthorizedException();
 
     const isValidPassword = await validatePassword(password, user.password);
 
