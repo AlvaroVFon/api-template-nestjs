@@ -5,7 +5,9 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
+import { OAuthUser } from './oAuth-user.entity';
 
 @Entity()
 export class User {
@@ -15,10 +17,13 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column()
-  password: string;
+  @Column({ nullable: true })
+  password?: string;
 
   @ManyToOne(() => Role, (role: Role) => role.users)
   @JoinColumn({ name: 'role_id' })
-  role: Role;
+  role?: Role;
+
+  @OneToMany(() => OAuthUser, (oAuthUser) => oAuthUser.user)
+  oAuthUsers: OAuthUser[];
 }

@@ -1,18 +1,4 @@
 services:
-  app:
-    build: .
-    container_name: nestjs-app
-    ports:
-      - '3000:3000'
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
-      - REDIS_URL=redis://cache:6379
-    depends_on:
-      - postgres
-      - cache
-    volumes:
-      - .:/app
-      - /app/node_modules
   postgres:
     image: postgres:15
     container_name: postgres-db
@@ -22,8 +8,3 @@ services:
       POSTGRES_DB: postgres
     ports:
       - '5432:5432'
-  cache:
-    image: redis:latest
-    container_name: redis-cache
-    ports:
-      - '6379:6379'

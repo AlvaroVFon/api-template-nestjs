@@ -6,11 +6,14 @@ import { hashPassword } from 'src/common/helpers/crypto.helper';
 import { User } from './entities/user.entity';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { RoleService } from 'src/role/role.service';
+import { OAuthUser } from './entities/oAuth-user.entity';
+import { OAuthUserDto } from './dto/create-oauth-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(OAuthUser) private oauthRepository: Repository<OAuthUser>,
     private roleService: RoleService,
   ) {}
 
@@ -29,11 +32,31 @@ export class UserService {
     return this.userRepository.save(newUser);
   }
 
-  findAll(): Promise<User[]> {
+  async createFromOAuth(email: string) {
+    const user = this.userRepository.create({ email });
+    return this.userRepository.save(user);
+  }
+
+  createOAuth(oAuthUserDto: OAuthUserDto) {
+    const oAuthUser = this.oauthRepository.create(oAuthUserDto);
+    return this.oauthRepository.save(oAuthUser);
+  }
+
+  async findOAuthByProvider(
+    providerId: string,
+    provider: string,
+  ): Promise<OAuthUser | null> {
+    return this.oauthRepository.findOne({
+      where: { provider, providerId },
+      loadRelationIds: true,
+    });
+  }
+
+  async findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
 
-  findOne(id: number): Promise<User | null> {
+  async findOne(id: number): Promise<User | null> {
     return this.userRepository.findOne({
       where: { id },
     });
@@ -45,9 +68,14 @@ export class UserService {
     });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto): Promise<UpdateResult> {
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UpdateResult> {
     return this.userRepository.update(id, updateUserDto);
   }
+
+  async updateOAuth() {}
 
   async remove(id: number): Promise<DeleteResult> {
     const result = await this.userRepository.delete(id);
